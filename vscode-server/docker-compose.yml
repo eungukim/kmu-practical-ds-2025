@@ -1,0 +1,14 @@
+services:
+  vscode:
+    image: linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PASSWORD=kmu2025!  # 웹 접속 비밀번호
+      - SUDO_PASSWORD=kmu2025!     # 터미널 sudo 비밀번호
+      - TZ=Asia/Seoul                   # 시간대 설정
+    volumes:
+      - ./vscode_config:/config         # 설정 파일 지속성 보장
+      - ./projects:/config/workspace  # 작업 디렉토리 마운트
+    ports:
+      - "8443:8443"                     # 기본 포트 매핑
+    restart: unless-stopped

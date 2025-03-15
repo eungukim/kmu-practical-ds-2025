@@ -1,0 +1,6 @@
+.history
+.conda
+.env
+vscode-server/vscode_config
+vscode-server/projects
+vscode-server/notebooks
