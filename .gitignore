@@ -4,3 +4,5 @@
 vscode-server/vscode_config
 vscode-server/projects
 vscode-server/notebooks
+__pycache__
+*.pyc
