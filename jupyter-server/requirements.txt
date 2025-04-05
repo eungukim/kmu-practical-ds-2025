@@ -25,6 +25,7 @@ lightgbm
 
 # 자연어 처리
 nltk
+txtai # 올인원 임베딩 프레임워크
 # spacy 설치 문제로 주석 처리
 # spacy
 # gensim
@@ -44,3 +45,8 @@ ipykernel
 jupyter
 tqdm
 joblib
+
+# 데이터셋
+kaggle
+
+

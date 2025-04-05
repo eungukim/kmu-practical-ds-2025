@@ -6,3 +6,7 @@ vscode-server/projects
 vscode-server/notebooks
 __pycache__
 *.pyc
+ch03/datasets/
+ch03/datasets/imdb_reviews.csv
+교보_S000001057805_리뷰_20250405_161146.csv
+ch03/subjects/kyobo.js

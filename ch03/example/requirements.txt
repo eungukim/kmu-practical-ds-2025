@@ -1,0 +1,7 @@
+txtai
+pandas
+requests
+numpy
+tqdm
+matplotlib
+seaborn 
