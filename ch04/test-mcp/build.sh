@@ -1,0 +1,1 @@
+docker build -t test-mcp-server:1.0 .

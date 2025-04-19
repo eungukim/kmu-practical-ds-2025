@@ -1,0 +1,1 @@
+docker build -t h2o-automl-mcp-server:1.0 .

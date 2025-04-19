@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "test-server": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-p", "7777:8000",
+        "test-mcp-server:1.0"
+      ]
+    }
+  }
+}
+
+
