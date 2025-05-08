@@ -5,6 +5,7 @@ services:
       - "${JUPYTER_PORT}:8888"
     volumes:
       - ./notebooks:/home/jovyan/work
+      - ./dataset:/home/jovyan/work/dataset:delegated
     environment:
       - POSTGRES_HOST=db
       - POSTGRES_DB=${POSTGRES_DB}

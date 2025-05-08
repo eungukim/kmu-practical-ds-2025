@@ -15,8 +15,10 @@ def call_agent(user_prompt: str):
     messages = [
         {"role": "system",
          "content": "You are a data-analysis assistant. "
+                    "Speak in Korean. "
                     "When a tool is helpful, respond *ONLY* with tool_calls."},
         {"role": "user", "content": user_prompt},
+        
     ]
 
     while True:
@@ -47,7 +49,7 @@ def call_agent(user_prompt: str):
 
 if __name__ == "__main__":
     prompt = (
-        "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv "
+        "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
         "파일을 가져와서 먼저 전체 기술통계를 보여 주고, "
         "sepal_length·petal_length·petal_width 3개 컬럼의 상관계수를 분석해줘"
     )

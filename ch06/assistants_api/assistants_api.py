@@ -1,4 +1,4 @@
-import requests, json, os, time, sseclient
+import requests, os, time
 from dotenv import load_dotenv
 
 # 환경 변수 로드

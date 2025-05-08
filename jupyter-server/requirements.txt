@@ -17,9 +17,9 @@ sqlalchemy
 
 # 머신러닝 및 딥러닝
 # tensorflow와 pytorch는 설치 문제가 있어 주석 처리
-# tensorflow
-# keras
-# pytorch
+tensorflow
+keras
+torch
 xgboost
 lightgbm
 

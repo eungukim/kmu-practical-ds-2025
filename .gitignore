@@ -13,3 +13,4 @@ ch03/subjects/kyobo.js
 ch05/kmu-ds-kaggle-mcp/venv/
 ch05/datasets/*
 .DS_Store
+jupyter-server/dataset/*

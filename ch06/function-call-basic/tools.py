@@ -2,6 +2,12 @@ from typing import List, Dict, Optional, Union
 import pandas as pd
 from pydantic import BaseModel, Field
 
+
+a : List[int] = [1,2,3]
+b : List[str] = ["123", "456", "789"]
+c : Dict[str, int] = {"a": 1, "b": 2, "c": 3}
+
+
 class DescribeArgs(BaseModel):
     csv_url: Optional[str] = Field(None, description="HTTP-accessible CSV file URL")
     df_key: Optional[str] = Field(None, description="세션에 저장된 DataFrame의 키")
