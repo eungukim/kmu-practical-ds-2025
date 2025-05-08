@@ -14,3 +14,5 @@ ch05/kmu-ds-kaggle-mcp/venv/
 ch05/datasets/*
 .DS_Store
 jupyter-server/dataset/*
+ch07/dataset/pulp_and_paper_mill.csv
+ch06/agentic-ml/datasets/mlg-ulb/creditcardfraud/creditcard.csv
