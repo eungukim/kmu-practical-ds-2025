@@ -1,0 +1,40 @@
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: jupyter.Dockerfile
+    ports:
+      - "${JUPYTER_PORT}:8888"
+      - "${GRADIO_PORT}:7860"
+    volumes:
+      - ../datasets:/home/jovyan/work/datasets:delegated
+      - ../lib:/home/jovyan/work/lib:delegated
+      - ../scripts:/home/jovyan/work/scripts:delegated
+    
+    command: start-notebook.py --NotebookApp.token='${JUPYTER_TOKEN}'
+    networks:
+      - kmu-ds-2025-ch08-network
+    mem_limit: 4g
+  
+  elasticsearch:
+    build:
+      context: .
+      dockerfile: elasticsearch.Dockerfile
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - kmu-ds-2025-ch08-network
+
+volumes:
+  esdata:
+
+networks:
+  kmu-ds-2025-ch08-network:
+    driver: bridge

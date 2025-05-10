@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Association Rule Mining - 핵심 개념과 실습</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+    
+    <style>
+        .reveal {
+            font-family: Arial, sans-serif;
+        }
+        
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: #1e3a8a;
+            font-weight: 700;
+        }
+        
+        .reveal h1 {
+            font-size: 2.5em;
+        }
+        
+        .reveal h2 {
+            font-size: 1.8em;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .reveal section {
+            text-align: left;
+        }
+        
+        .reveal .slide-background {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+        }
+        
+        .reveal table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            font-size: 0.8em;
+        }
+        
+        .reveal table th {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .reveal table td {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            background-color: white;
+        }
+        
+        .reveal code {
+            background-color: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .reveal pre {
+            box-shadow: none;
+            font-size: 0.7em;
+        }
+        
+        .reveal pre code {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 400px;
+        }
+        
+        .reveal ul, .reveal ol {
+            margin-left: 20px;
+        }
+        
+        .reveal li {
+            margin-bottom: 10px;
+            color: #334155;
+        }
+        
+        .highlight-box {
+            background-color: #dbeafe;
+            border-left: 5px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card h4 {
+            color: #1e3a8a;
+            margin: 0 0 10px 0;
+        }
+        
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .flex-item {
+            flex: 1;
+        }
+        
+        .center {
+            text-align: center;
+        }
+        
+        .formula {
+            background-color: #f8fafc;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Title -->
+            <section>
+                <h1 class="center">Association Rule Mining</h1>
+                <h3 class="center" style="color: #3b82f6;">핵심 개념과 Python 실습</h3>
+                <div class="center" style="margin-top: 60px;">
+                    <p style="color: #64748b;">트랜잭션 데이터에서 의미있는 규칙 발견하기</p>
+                </div>
+            </section>
+
+            <!-- Slide 2: Learning Objectives -->
+            <section>
+                <h2>학습 목표 및 개요</h2>
+                <div class="highlight-box">
+                    <h3 style="margin-top: 0;">연관규칙 마이닝이란?</h3>
+                    <ul>
+                        <li>트랜잭션 데이터에서 함께 등장하는 아이템의 규칙(A → B) 발견</li>
+                        <li>비즈니스 의사결정 및 추천 시스템에 활용</li>
+                    </ul>
+                </div>
+                
+                <h3>오늘의 학습 내용</h3>
+                <div class="flex-container">
+                    <div class="metric-card flex-item">
+                        <h4>핵심 개념</h4>
+                        <p>지표와 알고리즘 이해</p>
+                    </div>
+                    <div class="metric-card flex-item">
+                        <h4>Python 실습</h4>
+                        <p>mlxtend 라이브러리 활용</p>
+                    </div>
+                    <div class="metric-card flex-item">
+                        <h4>실제 사례</h4>
+                        <p>비즈니스 적용 방안</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: Key Metrics -->
+            <section>
+                <h2>주요 지표 정의</h2>
+                <table>
+                    <tr>
+                        <th>지표</th>
+                        <th>공식</th>
+                        <th>해석</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Support</strong></td>
+                        <td><code>supp(A∪B) = P(A∩B)</code></td>
+                        <td>전체 거래 중 A와 B가 함께 발생하는 비율</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Confidence</strong></td>
+                        <td><code>conf(A→B) = P(B|A)</code></td>
+                        <td>A가 발생했을 때 B도 발생할 조건부 확률</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lift</strong></td>
+                        <td><code>lift(A→B) = P(B|A)/P(B)</code></td>
+                        <td>1보다 크면 양의 상관관계</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Conviction</strong></td>
+                        <td><code>conv(A→B) = (1-P(B))/(1-conf(A→B))</code></td>
+                        <td>∞에 가까울수록 A가 ~B를 강하게 부정</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Slide: 지지도, 신뢰도, 향상도 시각적 설명 (상품A, B) -->
+            <section>
+                <h2>지지도, 신뢰도, 향상도 시각적 이해 (기본)</h2>
+                <div class="center">
+                    <img src="asso_rule1.png" alt="상품A, 상품B의 거래 집합 베른 다이어그램" style="width: 60%; border: 1px solid #cbd5e1; background: #f8fafc;">
+                    <p style="font-size:0.9em; color:#64748b; margin-top:8px;">[예시1] 상품A, 상품B의 거래 집합</p>
+                </div>
+                <ul style="margin-top:18px;">
+                    <li><b>지지도(Support)</b>: 전체 거래 중 특정 상품 조합이 등장한 비율<br>
+                        <span style="color:#3b82f6;">예: 상품A와 B를 모두 구매한 거래 비율 = 3/50 또는 3/100</span>
+                    </li>
+                    <li><b>신뢰도(Confidence)</b>: A를 산 사람 중 B도 산 비율<br>
+                        <span style="color:#3b82f6;">예: 상품A 구매자 중 상품B도 구매한 비율 = 3/(10+3)</span>
+                    </li>
+                    <li><b>향상도(Lift)</b>: A를 샀을 때 B를 살 확률이, 전체에서 B를 살 확률보다 얼마나 높은지<br>
+                        <span style="color:#3b82f6;">예: 신뢰도 ÷ (전체 중 B 구매 비율)</span>
+                    </li>
+                </ul>
+                <div class="highlight-box" style="margin-top:10px;">
+                    <b>Tip:</b> 그림의 숫자를 직접 대입해보며 각 지표의 의미를 직관적으로 이해해보세요!
+                </div>
+            </section>
+
+            <!-- Slide: 다양한 조합에서의 지표 해석 -->
+            <section>
+                <h2>다양한 조합에서의 지지도, 신뢰도, 향상도</h2>
+                <div class="center">
+                    <img src="asso_rule2.png" alt="상품A, B, C, D의 다양한 조합 베른 다이어그램" style="width: 80%; border: 1px solid #cbd5e1; background: #f8fafc;">
+                    <p style="font-size:0.9em; color:#64748b; margin-top:8px;">[예시2] 상품A, B, C, D의 다양한 조합</p>
+                </div>
+                <ul style="margin-top:18px;">
+                    <li>여러 상품 조합(예: A→B, A→C, D→C 등)에 대해 <b>지지도, 신뢰도, 향상도</b>를 각각 계산할 수 있습니다.</li>
+                    <li>각 조합별로 <span style="color:#3b82f6;">교집합/합집합/단독구매</span> 영역의 숫자를 활용해 직접 계산해보세요.</li>
+                    <li>이런 시각화는 실제 데이터에서 다양한 규칙을 비교·분석할 때 매우 유용합니다.</li>
+                </ul>
+                <div class="highlight-box" style="margin-top:10px;">
+                    <b>활용 팁:</b> 여러 규칙의 지표를 비교하며, 어떤 규칙이 더 강한 연관성을 가지는지 파악해보세요!
+                </div>
+            </section>
+
+            <!-- Slide 4: Metric Pros and Cons -->
+            <section>
+                <h2>평가 지표별 특성 비교</h2>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <div class="metric-card">
+                            <h4>Support</h4>
+                            <p><strong>장점:</strong> 가장 기본적, 전체적 발생 빈도 파악</p>
+                            <p><strong>단점:</strong> 의존성 파악 어려움</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Confidence</h4>
+                            <p><strong>장점:</strong> 조건부 확률로 직관적</p>
+                            <p><strong>단점:</strong> 결과 아이템의 전체 빈도 미고려</p>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <div class="metric-card">
+                            <h4>Lift</h4>
+                            <p><strong>장점:</strong> 독립성 대비 의존성 측정</p>
+                            <p><strong>단점:</strong> 낮은 지지도에서도 높은 값 가능</p>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Conviction</h4>
+                            <p><strong>장점:</strong> 의존도 강도 파악</p>
+                            <p><strong>단점:</strong> 계산 복잡, 해석 어려움</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 5: Algorithm Comparison -->
+            <section>
+                <h2>연관규칙 마이닝 알고리즘</h2>
+                <table>
+                    <tr>
+                        <th>알고리즘</th>
+                        <th>특징</th>
+                        <th>장점</th>
+                        <th>단점</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Apriori</strong></td>
+                        <td>후보 아이템셋 반복 생성·검증</td>
+                        <td>구현 간단</td>
+                        <td>대규모 데이터에서 느림</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FP-Growth</strong></td>
+                        <td>FP-Tree 1회 구축 후 탐색</td>
+                        <td>메모리 효율적, 빠른 속도</td>
+                        <td>구현 복잡</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Eclat</strong></td>
+                        <td>Tid-list 교차로 Support 계산</td>
+                        <td>병렬화 유리</td>
+                        <td>메모리 사용량 높음</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Slide 6: Python Setup -->
+            <section>
+                <h2>Python 실습 환경 구성</h2>
+                <pre><code class="language-python"># 필요 라이브러리 설치
+!pip install mlxtend --quiet
+
+# 라이브러리 임포트
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, fpgrowth, association_rules
+
+# 데이터 로드 및 전처리
+df_raw = pd.read_csv("Groceries_dataset.csv")
+transactions = df_raw.groupby("Member_number")['itemDescription'].apply(list)</code></pre>
+                
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <p><strong>실습 데이터:</strong> Groceries 데이터셋</p>
+                    <p>고객별 구매 품목 트랜잭션 데이터</p>
+                </div>
+            </section>
+
+            <!-- Slide 7: Frequent Itemsets -->
+            <section>
+                <h2>빈발 아이템셋 마이닝</h2>
+                <pre><code class="language-python"># TransactionEncoder로 데이터 변환
+te = TransactionEncoder()
+te_ary = te.fit(transactions).transform(transactions)
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+# Apriori 알고리즘 적용
+freq_apriori = apriori(df, min_support=0.02, use_colnames=True)
+
+# FP-Growth 알고리즘 적용
+freq_fpgrowth = fpgrowth(df, min_support=0.02, use_colnames=True)</code></pre>
+                
+                <div class="metric-card">
+                    <h4>결과 예시</h4>
+                    <p>min_support=0.02로 설정 시, 전체 거래의 2% 이상에서 나타나는 아이템셋 추출</p>
+                </div>
+            </section>
+
+            <!-- Slide 8: Association Rules -->
+            <section>
+                <h2>연관규칙 도출</h2>
+                <pre><code class="language-python"># 연관규칙 생성
+rules = association_rules(freq_fpgrowth, 
+                         metric="confidence", 
+                         min_threshold=0.3)
+
+# 규칙 정렬 (lift와 confidence 기준)
+rules = rules.sort_values(["lift", "confidence"], ascending=False)
+
+# 시각화
+import matplotlib.pyplot as plt
+rules.plot.scatter('support', 'confidence', alpha=0.6, s=rules['lift']*20)
+plt.title("Association Rules - Support vs Confidence")
+plt.show()</code></pre>
+            </section>
+
+            <!-- Slide 9: Recommendation System -->
+            <section>
+                <h2>규칙 기반 추천 함수</h2>
+                <pre><code class="language-python">def recommend(basket, rules_df, top_k=5):
+    cond = rules_df['antecedents'].apply(lambda x: x.issubset(basket))
+    candidates = (
+        rules_df[cond]
+        .assign(reco=lambda d: d['consequents'].apply(next(iter)))
+        .drop_duplicates('reco')
+        .nlargest(top_k, 'lift')
+    )
+    return list(candidates['reco'])
+
+# 사용 예시
+basket_now = {"whole milk", "bread"}
+recommendations = recommend(basket_now, rules)
+print(f"추천 상품: {recommendations}")</code></pre>
+            </section>
+
+            <!-- Slide 10: Use Cases -->
+            <section>
+                <h2>실제 적용 분야</h2>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <div class="metric-card">
+                            <h4>리테일</h4>
+                            <ul>
+                                <li>진열 최적화</li>
+                                <li>크로스셀링 전략</li>
+                            </ul>
+                        </div>
+                        <div class="metric-card">
+                            <h4>이커머스</h4>
+                            <ul>
+                                <li>상품 추천</li>
+                                <li>번들 상품 구성</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex-item">
+                        <div class="metric-card">
+                            <h4>콘텐츠 플랫폼</h4>
+                            <ul>
+                                <li>관련 콘텐츠 추천</li>
+                                <li>시청 패턴 분석</li>
+                            </ul>
+                        </div>
+                        <div class="metric-card">
+                            <h4>금융</h4>
+                            <ul>
+                                <li>상품 패키지 구성</li>
+                                <li>고객 행동 예측</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight-box" style="margin-top: 30px;">
+                    <h3>확장 아이디어</h3>
+                    <ul>
+                        <li>시간대별 규칙 분석</li>
+                        <li>고객 세그먼트별 규칙 적용</li>
+                        <li>연관규칙 + 협업필터링 하이브리드</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.js"></script>
+    
+    <script>
+        Reveal.initialize({
+            hash: true,
+            width: 1280,
+            height: 1000,
+            margin: 0.1,
+            minScale: 0.2,
+            maxScale: 1.5,
+            controls: true,
+            progress: true,
+            center: true,
+            slideNumber: true,
+            transition: 'slide',
+            plugins: [ RevealHighlight ]
+        });
+    </script>
+</body>
+</html>
