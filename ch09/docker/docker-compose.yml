@@ -1,0 +1,12 @@
+services:
+  jupyter:
+    build:
+      context: .
+    ports:
+      - "${JUPYTER_PORT}:8888"
+    volumes:
+      - ../datasets:/home/jovyan/work/datasets:delegated
+      - ../lib:/home/jovyan/work/lib:delegated
+      - ../scripts:/home/jovyan/work/scripts:delegated
+    
+    command: start-notebook.py --NotebookApp.token='${JUPYTER_TOKEN}'

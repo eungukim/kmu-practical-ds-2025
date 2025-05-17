@@ -18,3 +18,4 @@ jupyter-server/dataset/*
 ch06/agentic-ml/datasets/mlg-ulb/creditcardfraud/creditcard.csv
 remove_api_key.py
 filter_script.py
+ch09/simulation/
