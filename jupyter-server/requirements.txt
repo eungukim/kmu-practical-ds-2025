@@ -10,6 +10,7 @@ statsmodels
 # 데이터 시각화
 plotly
 bokeh
+koreanize_matplotlib
 
 # 데이터베이스 연결
 psycopg2-binary
